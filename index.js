@@ -28,14 +28,19 @@ const getTodaysGames = () => {
             game.gameId +
             '/pbp_all.json';
           axios.get(gameUrl).then(response => {
-            // Save to firestore
-            let docRef = db.collection('playbyplay').doc('game-' + game.gameId);
-            docRef.set(
-              {
-                plays: response.data.sports_content.game.play.reverse()
-              },
-              { merge: true }
-            );
+            // Save to firestore if plays is not empty
+            let plays = response.data.sports_content.game.play;
+            if (plays !== undefined) {
+              let docRef = db
+                .collection('playbyplay')
+                .doc('game-' + game.gameId);
+              docRef.set(
+                {
+                  plays: plays.reverse()
+                },
+                { merge: true }
+              );
+            }
           });
         });
       });
