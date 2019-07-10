@@ -25,6 +25,12 @@ const getTodaysGames = () => {
   });
 };
 
+// This function will compare the existing date in the firestore database and
+// compare it to the date from the http://data.nba.net/prod/v3/today.json api.
+//
+// If the dates match then continue to poll the api for date changes.
+// If the dates are different then delete the document repository (NBA) and
+// load the new games: getTodaysGames().
 const compareDates = dbDate => {
   axios.get(todayApi).then(response => {
     let apiDate = response.data.links.currentDate;
@@ -42,6 +48,8 @@ const compareDates = dbDate => {
         .delete();
       getTodaysGames();
       console.log('Deleted old games, set new games.');
+
+      //Run a function to poll the scoreboard api while games are active
     }
   });
 };
