@@ -4,7 +4,7 @@
 
 */
 
-const fs = require('fs');
+// const fs = require('fs');
 const axios = require('axios');
 const schedule = require('node-schedule');
 const getStartData = require('../data/getStartData');
@@ -29,25 +29,30 @@ const getScoreboard = require('../data/getScoreboard');
 // Get the days first game start time
 getStartData.then(startData => {
   let start = new Date(startData.startTime);
-  console.log(start);
+
+  // let dateNow = new Date();
+  // console.log(start, dateNow);
 
   var updateGamesSchedule = schedule.scheduleJob(
-    { start: start, rule: '*/1 * * * * *' },
-    function() {
-      // Check if games are active otherwise exit scheduler.
+    { start: start, rule: '*/5 * * * * *' },
 
+    function() {
+      // Check if games are active otherwise exit scheduler
       axios.get(startData.scoreboardApi).then(response => {
-        let todaysGames = response.data.games.filter(game => {
-          // return game.isGameActivated == true;
-          return true;
+        let todaysActiveGames = response.data.games.filter(game => {
+          return game.isGameActivated == true;
+          //return true;
         });
 
-        if (todaysGames.length > 0) {
-          console.log('yep');
-          // getGamePbp.start(getStartData);
-          // getScoreboard.start();
+        // Update game playbyplays and scoreboard
+        if (todaysActiveGames.length > 0) {
+          todaysActiveGames.forEach(game => {
+            getGamePbp.start(game.gameId);
+          });
+          getScoreboard.start();
         } else {
           updateGamesSchedule.cancel();
+          console.log('No active games');
         }
       });
     }

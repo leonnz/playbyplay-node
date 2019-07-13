@@ -10,40 +10,40 @@
 const axios = require('axios');
 const db = require('../services/firebase');
 const moment = require('moment-timezone');
-
+const getStartData = require('./getStartData');
 const apiBaseURL = 'http://data.nba.net';
 
-function getGamepbp(startData) {
-  startData.then(startData => {
+function getGamepbp(game) {
+  console.log(game);
+  getStartData.then(startData => {
     // Call the scoreboard api and get active games
-    // updatePlays(startData);
-    axios.get(startData.scoreboardApi).then(response => {
-      let todaysGames = response.data.games.filter(game => {
-        // return game.isGameActivated == true;
-        return true;
-      });
+    // axios.get(startData.scoreboardApi).then(response => {
+    //   let todaysGames = response.data.games.filter(game => {
+    //     // return game.isGameActivated == true;
+    //     return true;
+    //   });
 
-      todaysGames.forEach(game => {
-        const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
-          startData.apiDate
-        }/${game.gameId}/pbp_all.json`;
+    // todaysGames.forEach(game => {
+    const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
+      startData.apiDate
+    }/${game}/pbp_all.json`;
 
-        axios.get(gameUrl).then(response => {
-          // Save to firestore if plays is not empty
-          let plays = response.data.sports_content.game.play;
-          if (plays !== undefined) {
-            let docRef = db.collection('playbyplay').doc('game-' + game.gameId);
-            docRef.set(
-              {
-                plays: plays.reverse()
-              },
-              { merge: true }
-            );
-          }
-        });
-      });
+    axios.get(gameUrl).then(response => {
+      // Save to firestore if plays is not empty
+      let plays = response.data.sports_content.game.play;
+      if (plays !== undefined) {
+        let docRef = db.collection('playbyplay').doc('game-' + game);
+        docRef.set(
+          {
+            plays: plays.reverse()
+          },
+          { merge: true }
+        );
+      }
     });
+    // });
   });
+  // });
   console.log('getGamesPbp.js ran');
 }
 
