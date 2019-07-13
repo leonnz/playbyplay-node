@@ -18,30 +18,22 @@ var add_minutes = function(dt, minutes) {
 var start = add_minutes(new Date(), 0).toString();
 
 var j = schedule.scheduleJob(
-  { start: start, rule: '*/5 * * * * *' },
+  { start: start, rule: '*/10 * * * * *' },
   function() {
-    // Check for active games
-    axios.get(todayApi).then(response => {
-      const todaysScoreboardApi =
-        apiBaseURL + response.data.links.todayScoreboard;
-      let apiDate = response.data.links.currentDate;
-      // Call the scoreboard api
-      axios.get(todaysScoreboardApi).then(response => {
+    startData.then(startData => {
+      // Call the scoreboard api and get active games
+      axios.get(startData.scoreboardApi).then(response => {
         let todaysGames = response.data.games;
 
         todaysGames.forEach(game => {
           // let active = game.isGameActivated;
           let active = true;
-
-          // Poll the game api for plays
+          // Poll active games for plays
           if (active) {
-            const gameUrl =
-              apiBaseURL +
-              '/json/cms/noseason/game/' +
-              apiDate +
-              '/' +
-              game.gameId +
-              '/pbp_all.json';
+            const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
+              startData.apiDate
+            }/${game.gameId}/pbp_all.json`;
+
             axios.get(gameUrl).then(response => {
               // Save to firestore if plays is not empty
               let plays = response.data.sports_content.game.play;
