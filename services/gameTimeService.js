@@ -53,6 +53,8 @@ getStartData.then(startData => {
           });
           getScoreboard.start();
         } else {
+          // Call the scoreboard one more time
+          getScoreboard.start();
           updateGamesSchedule.cancel();
           console.log('No active games');
         }
