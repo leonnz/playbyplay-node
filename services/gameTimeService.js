@@ -34,13 +34,15 @@ getStartData.then(startData => {
   // console.log(start, dateNow);
 
   var updateGamesSchedule = schedule.scheduleJob(
-    { start: start, rule: '*/5 * * * * *' },
+    { start: start, rule: '*/30 * * * * *' },
 
     function() {
       // Check if games are active otherwise exit scheduler
       axios.get(startData.scoreboardApi).then(response => {
         let todaysActiveGames = response.data.games.filter(game => {
-          return game.isGameActivated == true;
+          return game.isGameActivated == true && game.period.current !== 0;
+
+          // for getting finished games data
           //return true;
         });
 
