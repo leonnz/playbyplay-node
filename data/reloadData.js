@@ -10,7 +10,7 @@
 const fs = require('fs');
 const axios = require('axios');
 const db = require('../services/firebase');
-
+const getGamePbp = require('../data/getGamePbp');
 const apiBaseURL = 'http://data.nba.net';
 const todayApi = apiBaseURL + '/prod/v3/today.json';
 
@@ -42,14 +42,18 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           todaysGames: todaysGames
         });
 
-        // Set first game start time in times.json
-        let startTime = todaysGames.map(({ startTimeUTC }) => startTimeUTC)[0];
-        fs.writeFile('times.json', JSON.stringify({ startTime }), function(
-          err
-        ) {
-          if (err) throw err;
-          console.log('Time file saved');
+        todaysGames.forEach(game => {
+          getGamePbp.start(game.gameId);
         });
+
+        // // Set first game start time in times.json
+        // let startTime = todaysGames.map(({ startTimeUTC }) => startTimeUTC)[0];
+        // fs.writeFile('times.json', JSON.stringify({ startTime }), function(
+        //   err
+        // ) {
+        //   if (err) throw err;
+        //   console.log('Time file saved');
+        // });
       });
     });
   });

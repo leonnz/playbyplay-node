@@ -9,21 +9,12 @@
 
 const axios = require('axios');
 const db = require('../services/firebase');
-const moment = require('moment-timezone');
 const getStartData = require('./getStartData');
 const apiBaseURL = 'http://data.nba.net';
 
 function getGamepbp(game) {
   console.log(game);
   getStartData.then(startData => {
-    // Call the scoreboard api and get active games
-    // axios.get(startData.scoreboardApi).then(response => {
-    //   let todaysGames = response.data.games.filter(game => {
-    //     // return game.isGameActivated == true;
-    //     return true;
-    //   });
-
-    // todaysGames.forEach(game => {
     const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
       startData.apiDate
     }/${game}/pbp_all.json`;
@@ -41,9 +32,7 @@ function getGamepbp(game) {
         );
       }
     });
-    // });
   });
-  // });
   console.log('getGamesPbp.js ran');
 }
 
