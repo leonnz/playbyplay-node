@@ -17,6 +17,7 @@ function getGamepbp(game) {
   getStartData.then(startData => {
     const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
       startData.apiDate
+      // '20190713'
     }/${game}/pbp_all.json`;
 
     axios.get(gameUrl).then(response => {
