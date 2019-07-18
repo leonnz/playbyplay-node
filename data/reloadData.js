@@ -7,7 +7,6 @@
 
 */
 
-const fs = require('fs');
 const axios = require('axios');
 const db = require('../services/firebase');
 const getGamePbp = require('../data/getGamePbp');
@@ -45,15 +44,6 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
         todaysGames.forEach(game => {
           getGamePbp.start(game.gameId);
         });
-
-        // // Set first game start time in times.json
-        // let startTime = todaysGames.map(({ startTimeUTC }) => startTimeUTC)[0];
-        // fs.writeFile('times.json', JSON.stringify({ startTime }), function(
-        //   err
-        // ) {
-        //   if (err) throw err;
-        //   console.log('Time file saved');
-        // });
       });
     });
   });
