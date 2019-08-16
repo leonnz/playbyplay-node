@@ -10,9 +10,15 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
     .then(response => {
       let players = response.data.league.standard;
 
-      var stream = fs.createWriteStream('../services/logs/results.txt', {
+      var failFile = fs.createWriteStream('../services/logs/results-fail.txt', {
         flags: 'a'
       });
+      var successFile = fs.createWriteStream(
+        '../services/logs/playerIds.json',
+        {
+          flags: 'a'
+        }
+      );
 
       players.forEach(player => {
         let playerPicUrl = `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${
@@ -28,10 +34,14 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
             let output = `Couldn't download image for: ${player.firstName} ${
               player.lastName
             } PlayerId: ${player.personId}`;
-            stream.write(output + '\n');
+            failFile.write(output + '\n');
           }
         });
       });
+      let files = fs.readdirSync('../images/players/');
+      let ids = files.map(file => file.replace(/\.[^/.]+$/, ''));
+      let idsJson = JSON.stringify(ids);
+      successFile.write(idsJson);
     })
     .catch(function(error) {
       console.log(error);
