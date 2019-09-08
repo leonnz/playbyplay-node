@@ -1,3 +1,10 @@
+/* 
+    Description:
+    
+    Gets the player pics using playerId.
+
+*/
+
 const axios = require('axios');
 const download = require('download-file');
 const fs = require('fs');
@@ -21,9 +28,7 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
       );
 
       players.forEach(player => {
-        let playerPicUrl = `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${
-          player.personId
-        }.png`;
+        let playerPicUrl = `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${player.personId}.png`;
         var options = {
           directory: '../images/players',
           filename: `${player.personId}.png`
@@ -31,9 +36,7 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
 
         download(playerPicUrl, options, function(err) {
           if (err) {
-            let output = `Couldn't download image for: ${player.firstName} ${
-              player.lastName
-            } PlayerId: ${player.personId}`;
+            let output = `Couldn't download image for: ${player.firstName} ${player.lastName} PlayerId: ${player.personId}`;
             failFile.write(output + '\n');
           }
         });

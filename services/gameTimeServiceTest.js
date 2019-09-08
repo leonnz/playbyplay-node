@@ -19,9 +19,9 @@ var mainSchedule = schedule.scheduleJob({ rule: '*/10 * * * * *' }, () => {
       let todaysActiveGames = response.data.games.filter(game => {
         return game.isGameActivated == true && game.period.current !== 0;
       });
-      //  If there are actiuve games then update game playbyplays and scoreboard every 24 seconds
+      //  If there are active games then update game playbyplays and scoreboard every 24 seconds
       if (todaysActiveGames.length == 0) {
-        var updateGamesSchedule = schedule.scheduleJob(
+        var updateGamePbpSchedule = schedule.scheduleJob(
           { rule: '*/1 * * * * *' },
           () => {
             console.log('doing something every 1 seconds');
@@ -34,7 +34,7 @@ var mainSchedule = schedule.scheduleJob({ rule: '*/10 * * * * *' }, () => {
       } else {
         //  There are no active games, call the scoreboard one more time and cancel the job.
         getScoreboard.start();
-        updateGamesSchedule.cancel();
+        updateGamePbpSchedule.cancel();
       }
     });
   });
