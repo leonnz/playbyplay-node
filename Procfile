@@ -1,1 +1,1 @@
-worker: node ./services/gameTimeService.js
+worker: node ./services/gameTimeServiceTest.js
