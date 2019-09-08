@@ -1,1 +1,1 @@
-worker: node ./tests/heroku.test.js
+worker: node ./services/gameTimeService.js

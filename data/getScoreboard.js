@@ -31,7 +31,7 @@ function getScoreBoard() {
       );
     });
   });
-  console.log('getScoreboard.js ran');
+  // console.log('getScoreboard.js ran');
 }
 
 module.exports.start = getScoreBoard;

@@ -13,7 +13,7 @@ const getStartData = require('./getStartData');
 const apiBaseURL = 'http://data.nba.net';
 
 function getGamepbp(game) {
-  console.log(game);
+  // console.log(game);
   getStartData.then(startData => {
     const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${
       startData.apiDate
@@ -34,7 +34,7 @@ function getGamepbp(game) {
       }
     });
   });
-  console.log('getGamesPbp.js ran');
+  // console.log('getGamesPbp.js ran');
 }
 
 module.exports.start = getGamepbp;
