@@ -9,7 +9,11 @@ const axios = require('axios');
 const download = require('download-file');
 const fs = require('fs');
 
-let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
+const apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
+const playerImgUrl =
+  'https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/';
+
+const playerImagesFolder = '../images/players/';
 
 (function main() {
   axios
@@ -28,9 +32,9 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
       );
 
       players.forEach(player => {
-        let playerPicUrl = `https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${player.personId}.png`;
+        let playerPicUrl = `${playerImgUrl}${player.personId}.png`;
         var options = {
-          directory: '../images/players',
+          directory: playerImagesFolder,
           filename: `${player.personId}.png`
         };
 
@@ -41,7 +45,7 @@ let apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
           }
         });
       });
-      let files = fs.readdirSync('../images/players/');
+      let files = fs.readdirSync(playerImagesFolder);
       let ids = files.map(file => file.replace(/\.[^/.]+$/, ''));
       let idsJson = JSON.stringify(ids);
       successFile.write(idsJson);
