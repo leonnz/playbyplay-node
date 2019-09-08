@@ -6,4 +6,5 @@
 
 // cycle();
 
-console.log('scheduler from ./tests/heroku.test.js');
+var date = new Date();
+console.log('scheduler from ./tests/heroku.test.js at ' + date);
