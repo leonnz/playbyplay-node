@@ -1,5 +1,5 @@
 /**
- * At 4.30pm UTC everyday this schedule runs.
+ * At 5.00pm UTC everyday this schedule runs.
  *
  *    1. Get the days first game start time and pass it to the gametime service.
  *    2. The gametime service runs every 24 seconds and checks for active games and populates the play by play data.
@@ -12,7 +12,7 @@ const getStartData = require('../data/getStartData');
 const getGamePbp = require('../data/getGamePbp');
 const getScoreboard = require('../data/getScoreboard');
 
-const prod = { hour: 16, minute: 30, dayOfWeek: new schedule.Range(0, 6) };
+const prod = { hour: 17, minute: 0, dayOfWeek: new schedule.Range(0, 6) };
 const test = '*/5 * * * * *';
 
 const mainScheduleRule = prod; // Main schedule run time, 4.30pm UTC everyday.
