@@ -13,7 +13,7 @@ const getScoreboard = require('../data/getScoreboard');
 
 //  Every 30 mins check the scoreboard for active games.
 var mainSchedule = schedule.scheduleJob({ rule: '*/10 * * * * *' }, () => {
-  console.log('doing something every 10 seconds');
+  console.log('doing something every 10 seconds from laptop');
   getStartData.then(startData => {
     axios.get(startData.scoreboardApi).then(response => {
       let todaysActiveGames = response.data.games.filter(game => {
