@@ -32,6 +32,11 @@ var mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
 //  If there are active games then update game playbyplays and scoreboard.
 //  If there are no active games, call the scoreboard one more time and cancel the schedule.
 const gameTimeService = function(startTime) {
+  var date = new Date();
+  console.log('This indeed did run at: ' + date);
+  console.log(
+    'and the passed in start time for the gameTime service is: ' + startTime
+  );
   var gameTimeSchedule = schedule.scheduleJob(
     {
       start: startTime,
