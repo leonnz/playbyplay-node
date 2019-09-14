@@ -10,3 +10,8 @@ test('The NBA API returns data', async () => {
   const response = await axios.get(apiUrl);
   expect(response.data).toBeDefined();
 });
+
+test('The NBA API todayScoreboard endpoint is defined', async () => {
+  const response = await axios.get(apiUrl);
+  expect(response.data.links.todayScoreboard).toBeDefined();
+});
