@@ -1,8 +1,9 @@
 /**
- * At 5.00pm UTC everyday this schedule runs.
+ *    At 5.00pm UTC everyday this schedule runs.
  *
  *    1. Get the days first game start time and pass it to the gametime service.
  *    2. The gametime service runs every 24 seconds and checks for active games and populates the play by play data.
+ *
  */
 
 const fs = require('fs');
@@ -17,20 +18,19 @@ const test = '*/5 * * * * *';
 
 const mainScheduleRule = prod; // Main schedule run time, 4.30pm UTC everyday.
 const gameTimeScheduleRule = '*/24 * * * * *'; // Gametime schedule run time, every 24 seconds.
-const jsonStartTimeFile = '../data/start_time.json'; // File with the first days game start time.
+const jsonStartTimeFile = './data/start_time.json'; // File with the first days game start time.
 
-//  Gets the first game start time and kicks off the gametime service.
 var mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
   var startTimeFile = fs.readFileSync(jsonStartTimeFile);
   var startTime = JSON.parse(startTimeFile).gameStartTime;
-  //var testStartTime = new Date();
   console.log(startTime);
   gameTimeService(startTime);
 });
 
-//  At the first game start time, this service runs every 24 seconds and checks the scoreboard for active games.
-//  If there are active games then update game playbyplays and scoreboard.
-//  If there are no active games, call the scoreboard one more time and cancel the schedule.
+/**
+ *
+ * @param {String} startTime The start time of the game time service.
+ */
 const gameTimeService = function(startTime) {
   var date = new Date();
   console.log('This indeed did run at: ' + date);
