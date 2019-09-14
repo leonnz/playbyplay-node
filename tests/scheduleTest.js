@@ -17,13 +17,13 @@ const getScoreboard = require('../data/getScoreboard');
 const prod = { hour: 17, minute: 0, dayOfWeek: new schedule.Range(0, 6) };
 const test = '*/5 * * * * *';
 
-const mainScheduleRule = prod; // Main schedule run time, 4.30pm UTC everyday.
+const mainScheduleRule = test; // Main schedule run time, 4.30pm UTC everyday.
 const gameTimeScheduleRule = '*/24 * * * * *'; // Gametime schedule run time, every 24 seconds.
 const jsonStartTimeFile = './data/start_time.json'; // File with the first days game start time.
 
-var mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
-  var startTimeFile = fs.readFileSync(jsonStartTimeFile);
-  var startTime = JSON.parse(startTimeFile).gameStartTime;
+const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
+  const startTimeFile = fs.readFileSync(jsonStartTimeFile);
+  const startTime = JSON.parse(startTimeFile).gameStartTime;
   console.log(startTime);
   gameTimeService(startTime);
 });
@@ -33,12 +33,12 @@ var mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
  * @param {String} startTime The start time of the game time service.
  */
 const gameTimeService = function(startTime) {
-  var date = new Date();
+  const date = new Date();
   console.log('This indeed did run at: ' + date);
   console.log(
     'and the passed in start time for the gameTime service is: ' + startTime
   );
-  var gameTimeSchedule = schedule.scheduleJob(
+  const gameTimeSchedule = schedule.scheduleJob(
     {
       start: startTime,
       rule: gameTimeScheduleRule
