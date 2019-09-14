@@ -1,7 +1,8 @@
 /**
- *    At 5.00pm UTC everyday this schedule runs.
+ *    Game Time Schedule
  *
- *    1. Get the days first game start time and pass it to the gametime service.
+ *    1. At 5.00pm UTC everyday this schedule runs on a Heroku worker process.
+ *    2. Gets the days first game start time and pass it to the gametime service.
  *    2. The gametime service runs every 24 seconds and checks for active games and populates the play by play data.
  *
  */

@@ -1,11 +1,11 @@
-/*
-  Description:
-    This function deletes all the Firebase documents in the playbyplay 
-    collection from the previous day.
-
-  Schedule: Runs 1pm EDT
-
-*/
+/**
+ *    Reload Data Schedule
+ *
+ *    1. At 4.30pm UTC this schedule runs using Heroku Scheduler.
+ *    2. Delete's all doc's (nba and playbyplays) in the Firestore playbyplay collection.
+ *    3. Calls the NBA api to get the days game data and save to Firestore 'nba' doc.
+ *    4. Get's the first game start time for the day and saves to the json time file.
+ */
 
 const fs = require('fs');
 const axios = require('axios');
@@ -25,24 +25,18 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
         .delete();
     });
 
-    // Call the today api and get the scoareboad api URL
     axios.get(todayApi).then(response => {
       const todaysScoreboardApi =
         // 'http://data.nba.net/prod/v2/20190713/scoreboard.json';
         apiBaseURL + response.data.links.todayScoreboard;
       // const date = response.data.links.currentDate;
 
-      // Call the scoreboard api
       axios.get(todaysScoreboardApi).then(response => {
         let todaysGames = response.data.games;
 
-        // Save to firestore
         let docRef = db.collection('playbyplay').doc('nba');
-        docRef.set({
-          todaysGames: todaysGames
-        });
+        docRef.set({ todaysGames: todaysGames });
 
-        // TODO Gets the first days games start time and save to times.json file.
         const gameStartTime = todaysGames[0].startTimeUTC;
 
         console.log(gameStartTime);
@@ -56,10 +50,9 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           }
         );
 
-        //  If the app crashes then on restart it will get all the play by play data
-        todaysGames.forEach(game => {
-          getGamePbp.start(game.gameId);
-        });
+        // todaysGames.forEach(game => {
+        //   getGamePbp.start(game.gameId);
+        // });
       });
     });
   });
