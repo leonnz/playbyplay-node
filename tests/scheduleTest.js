@@ -17,7 +17,7 @@ const getScoreboard = require('../data/getScoreboard');
 const prod = { hour: 17, minute: 0, dayOfWeek: new schedule.Range(0, 6) };
 const test = '*/5 * * * * *';
 
-const mainScheduleRule = test; // Main schedule run time, 4.30pm UTC everyday.
+const mainScheduleRule = prod; // Main schedule run time, 4.30pm UTC everyday.
 const gameTimeScheduleRule = '*/24 * * * * *'; // Gametime schedule run time, every 24 seconds.
 const jsonStartTimeFile = './data/start_time.json'; // File with the first days game start time.
 
