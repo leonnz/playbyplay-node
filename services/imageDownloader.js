@@ -1,9 +1,6 @@
-/* 
-    Description:
-    
-    Gets the player pics using playerId.
-
-*/
+/**
+ *    File downloader script for player profile pics.
+ */
 
 const fs = require('fs');
 const axios = require('axios');
@@ -20,33 +17,33 @@ const resultSuccessFile = '../services/logs/playerIds.json';
   axios
     .get(apiPlayersUrl)
     .then(response => {
-      let players = response.data.league.standard;
+      const players = response.data.league.standard;
 
-      var failFile = fs.createWriteStream(resultFailFile, {
+      const failFile = fs.createWriteStream(resultFailFile, {
         flags: 'a'
       });
-      var successFile = fs.createWriteStream(resultSuccessFile, {
+      const successFile = fs.createWriteStream(resultSuccessFile, {
         flags: 'a'
       });
 
       players.forEach(player => {
-        let playerPicUrl = `${playerImgUrl}${player.personId}.png`;
-        var options = {
+        const playerPicUrl = `${playerImgUrl}${player.personId}.png`;
+        const options = {
           directory: playerImagesFolder,
           filename: `${player.personId}.png`
         };
 
         download(playerPicUrl, options, function(err) {
           if (err) {
-            let output = `Couldn't download image for: ${player.firstName} ${player.lastName} PlayerId: ${player.personId}`;
+            const output = `Couldn't download image for: ${player.firstName} ${player.lastName} PlayerId: ${player.personId}`;
             failFile.write(output + '\n');
           }
         });
       });
 
-      let files = fs.readdirSync(playerImagesFolder);
-      let ids = files.map(file => file.replace(/\.[^/.]+$/, ''));
-      let idsJson = JSON.stringify(ids);
+      const files = fs.readdirSync(playerImagesFolder);
+      const ids = files.map(file => file.replace(/\.[^/.]+$/, ''));
+      const idsJson = JSON.stringify(ids);
       successFile.write(idsJson);
     })
     .catch(function(error) {
