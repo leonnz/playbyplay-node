@@ -27,12 +27,14 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
 
     axios.get(todayApi).then(response => {
       // Test data
-      const todaysScoreboardApi =
-        'http://data.nba.net/prod/v2/20190713/scoreboard.json';
-      const date = '20190713';
+      // const todaysScoreboardApi =
+      //   'http://data.nba.net/prod/v2/20190713/scoreboard.json';
+      // const date = '20190713';
+
       // Prod
-      // apiBaseURL + response.data.links.todayScoreboard;
-      // const date = response.data.links.currentDate;
+      const todaysScoreboardApi =
+        apiBaseURL + response.data.links.todayScoreboard;
+      const date = response.data.links.currentDate;
 
       axios.get(todaysScoreboardApi).then(response => {
         let todaysGames = response.data.games;
