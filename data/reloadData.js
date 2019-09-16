@@ -26,9 +26,12 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
     });
 
     axios.get(todayApi).then(response => {
+      // Test data
       const todaysScoreboardApi =
-        // 'http://data.nba.net/prod/v2/20190713/scoreboard.json';
-        apiBaseURL + response.data.links.todayScoreboard;
+        'http://data.nba.net/prod/v2/20190713/scoreboard.json';
+      const date = '20190713';
+      // Prod
+      // apiBaseURL + response.data.links.todayScoreboard;
       // const date = response.data.links.currentDate;
 
       axios.get(todaysScoreboardApi).then(response => {
@@ -50,9 +53,9 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           }
         );
 
-        // todaysGames.forEach(game => {
-        //   getGamePbp.start(game.gameId);
-        // });
+        todaysGames.forEach(game => {
+          getGamePbp.start(game.gameId, date);
+        });
       });
     });
   });
