@@ -9,6 +9,10 @@ const download = require('download-file');
 const apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
 const playerImgUrl =
   'https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/';
+
+const dleaguePlayerImgUrl =
+  'https://ak-static.cms.nba.com/wp-content/uploads/headshots/dleague/';
+
 const playerImagesFolder = '../images/players/';
 const resultFailFile = '../services/logs/results-fail.txt';
 const resultSuccessFile = '../services/logs/playerIds.json';
@@ -18,6 +22,7 @@ const resultSuccessFile = '../services/logs/playerIds.json';
     .get(apiPlayersUrl)
     .then(response => {
       const players = response.data.league.standard;
+      // const players = response.data.league.vegas; // D-League players
 
       const failFile = fs.createWriteStream(resultFailFile, {
         flags: 'a'
