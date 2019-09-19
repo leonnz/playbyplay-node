@@ -10,10 +10,12 @@ const apiPlayersUrl = 'http://data.nba.net/prod/v1/2019/players.json';
 const playerImgUrl =
   'https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/';
 
-const dleaguePlayerImgUrl =
-  'https://ak-static.cms.nba.com/wp-content/uploads/headshots/dleague/';
+// const playerImgUrl =
+//   'https://ak-static.cms.nba.com/wp-content/uploads/headshots/dleague/'; // D-League
 
 const playerImagesFolder = '../images/players/';
+// const playerImagesFolder = '../images/dleague/'; // D-League
+
 const resultFailFile = '../services/logs/results-fail.txt';
 const resultSuccessFile = '../services/logs/playerIds.json';
 
