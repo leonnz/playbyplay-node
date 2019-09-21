@@ -30,7 +30,7 @@ function getGamepbp(gameId, date) {
         let docRef = db.collection('playbyplay').doc('game-' + gameId);
         docRef.set(
           {
-            plays: plays.reverse()
+            plays: plays
           },
           { merge: true }
         );
