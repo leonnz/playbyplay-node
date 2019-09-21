@@ -8,16 +8,16 @@ const schedule = require('node-schedule');
 const testGameData = [
   {
     gameId: '0011900001',
-    isGameActivated: false,
+    isGameActivated: true,
     startTimeEastern: '8:00 PM ET',
     startTimeUTC: '2019-10-01T00:00:00.000Z',
-    clock: '',
+    clock: '01:00',
     gameDuration: {
       hours: '',
       minutes: ''
     },
     period: {
-      current: 0,
+      current: 1,
       type: 0,
       maxRegular: 4,
       isHalftime: false,
@@ -69,14 +69,15 @@ function runGameTimeTestService() {
         let play = {
           clock: `00:0${counter}`,
           description: `Event number ${counter}`,
-          person_id: ''
+          person_id: '',
+          event: `${counter}`
         };
 
         testPlays.push(play);
 
         testGameDoc.set(
           {
-            plays: testPlays.reverse()
+            plays: testPlays
           },
           { merge: true }
         );
