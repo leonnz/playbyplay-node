@@ -25,12 +25,12 @@ function getGamepbp(gameId, date) {
     console.log(gameUrl);
     axios.get(gameUrl).then(response => {
       // Save to firestore if plays is not empty
-      let plays = response.data.sports_content.game.play.reverse();
+      let plays = response.data.sports_content.game.play;
       if (plays !== undefined) {
         let docRef = db.collection('playbyplay').doc('game-' + gameId);
         docRef.set(
           {
-            plays: plays
+            plays: plays.reverse()
           },
           { merge: true }
         );
