@@ -59,12 +59,12 @@ function runGameTimeTestService() {
     testNbaDoc.set({ todaysGames: testGameData });
     let testGameDoc = db.collection('playbyplay').doc('game-0011900001');
 
-    let counter = 0;
+    let counter = 1;
 
     let testPlays = [];
 
     let testGameTimeSchedule = schedule.scheduleJob(
-      { rule: '*/3 * * * * *' },
+      { rule: '*/1 * * * * *' },
       () => {
         let play = {
           clock: `00:0${counter}`,
