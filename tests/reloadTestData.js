@@ -1,10 +1,8 @@
 /**
- *    Reload Data Schedule
+ *    Reload Test Data Schedule
  *
- *    1. At 4.30pm UTC this schedule runs using Heroku Scheduler.
- *    2. Delete's all doc's (nba and playbyplays) in the Firestore playbyplay collection.
- *    3. Calls the NBA api to get the days game data and save to Firestore 'nba' doc.
- *    4. Get's the first game start time for the day and saves to the json time file.
+ *    A test version of the reloadData.js schedule that can be run manually.
+ *
  */
 
 const fs = require('fs');
@@ -15,7 +13,7 @@ const apiBaseURL = 'http://data.nba.net';
 const todayApi = apiBaseURL + '/prod/v3/today.json';
 
 (function() {
-  console.log('reloadData.js ran');
+  console.log('reloadTestData.js ran');
   let collection = db.collection('playbyplay').get();
 
   collection.then(querySnapshot => {
@@ -27,8 +25,8 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
 
     axios.get(todayApi).then(response => {
       const todaysScoreboardApi =
-        apiBaseURL + response.data.links.todayScoreboard;
-      const date = response.data.links.currentDate;
+        'http://data.nba.net/prod/v2/20190713/scoreboard.json';
+      const date = '20190713';
 
       axios.get(todaysScoreboardApi).then(response => {
         let todaysGames = response.data.games;
@@ -41,7 +39,7 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
         console.log(gameStartTime);
 
         fs.writeFile(
-          'start_time.json',
+          'start_time_test.json',
           JSON.stringify({ gameStartTime }),
           function(err) {
             if (err) throw err;
