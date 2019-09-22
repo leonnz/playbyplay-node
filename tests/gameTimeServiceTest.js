@@ -70,7 +70,9 @@ function runGameTimeTestService() {
           clock: `00:0${counter}`,
           description: `Event number ${counter}`,
           person_id: '',
-          event: `${counter}`
+          event: `${counter}`,
+          home_score: `${counter + 1}`,
+          visitor_score: `${counter + 2}`
         };
 
         testPlays.push(play);
