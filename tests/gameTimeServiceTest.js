@@ -64,7 +64,7 @@ function runGameTimeTestService() {
     let testPlays = [];
 
     let testGameTimeSchedule = schedule.scheduleJob(
-      { rule: '*/1 * * * * *' },
+      { rule: '*/3 * * * * *' },
       () => {
         let play = {
           clock: `00:0${counter}`,
