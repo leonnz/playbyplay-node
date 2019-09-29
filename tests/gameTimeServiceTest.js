@@ -5,58 +5,15 @@
 const db = require('../services/firebase');
 const schedule = require('node-schedule');
 
-const testGameData = [
-  {
-    gameId: '0011900001',
-    isGameActivated: true,
-    startTimeEastern: '8:00 PM ET',
-    startTimeUTC: '2019-10-01T00:00:00.000Z',
-    clock: '01:00',
-    gameDuration: {
-      hours: '',
-      minutes: ''
-    },
-    period: {
-      current: 1,
-      type: 0,
-      maxRegular: 4,
-      isHalftime: false,
-      isEndOfPeriod: false
-    },
-    vTeam: {
-      teamId: '12329',
-      triCode: 'SDS',
-      win: '0',
-      loss: '0',
-      seriesWin: '',
-      seriesLoss: '',
-      score: '',
-      linescore: []
-    },
-    hTeam: {
-      teamId: '1610612745',
-      triCode: 'HOU',
-      win: '0',
-      loss: '0',
-      seriesWin: '',
-      seriesLoss: '',
-      score: '',
-      linescore: []
-    }
-  }
-];
-
 function runGameTimeTestService() {
   let collection = db.collection('playbyplay').get();
 
   collection.then(querySnapshot => {
-    querySnapshot.docs.forEach(doc => {
-      db.collection('playbyplay')
-        .doc(doc.id)
-        .delete();
-    });
-    let testNbaDoc = db.collection('playbyplay').doc('nba');
-    testNbaDoc.set({ todaysGames: testGameData });
+    // querySnapshot.docs.forEach(doc => {
+    //   db.collection('playbyplay')
+    //     .doc(doc.id)
+    //     .delete();
+    // });
     let testGameDoc = db.collection('playbyplay').doc('game-0011900001');
 
     let counter = 1;
@@ -64,7 +21,7 @@ function runGameTimeTestService() {
     let testPlays = [];
 
     let testGameTimeSchedule = schedule.scheduleJob(
-      { rule: '*/3 * * * * *' },
+      { rule: '*/3 * * * * *', start: Date.now() + 1 },
       () => {
         let play = {
           clock: `00:0${counter}`,
@@ -79,7 +36,16 @@ function runGameTimeTestService() {
 
         testGameDoc.set(
           {
-            plays: testPlays
+            gameId: '0011900001',
+            isGameActivated: true,
+            startTimeUTC: '2019-10-01T00:00:00.000Z',
+            endTimeUTC: '0',
+            period: 1,
+            vTeamName: 'SDS',
+            vTeamScore: '0',
+            hTeamName: 'HOU',
+            hTeamScore: '0',
+            zPlayByPlay: testPlays
           },
           { merge: true }
         );

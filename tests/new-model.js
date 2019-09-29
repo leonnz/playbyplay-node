@@ -8,7 +8,7 @@
 const fs = require('fs');
 const axios = require('axios');
 const db = require('../services/firebase');
-const getGamePbp = require('../data/getGamePbp');
+const getGamePbpTestData = require('../tests/getGamePbpTestData');
 const apiBaseURL = 'http://data.nba.net';
 const todayApi = apiBaseURL + '/prod/v3/today.json';
 
@@ -17,22 +17,24 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
   let collection = db.collection('playbyplay').get();
 
   collection.then(querySnapshot => {
-    querySnapshot.docs.forEach(doc => {
-      db.collection('playbyplay')
-        .doc(doc.id)
-        .delete();
-    });
+    // querySnapshot.docs.forEach(doc => {
+    //   db.collection('playbyplay')
+    //     .doc(doc.id)
+    //     .delete();
+    // });
 
     axios.get(todayApi).then(response => {
+      // test
       const todaysScoreboardApi =
         'http://data.nba.net/prod/v2/20190713/scoreboard.json';
       const date = '20190713';
+      // prod
+      //   const todaysScoreboardApi =
+      //     'http://data.nba.net/prod/v2/20190930/scoreboard.json';
+      //   const date = '20190930';
 
       axios.get(todaysScoreboardApi).then(response => {
         let todaysGames = response.data.games;
-
-        // let docRef = db.collection('playbyplay').doc('nba');
-        // docRef.set({ todaysGames: todaysGames });
 
         const gameStartTime = todaysGames[0].startTimeUTC;
 
@@ -53,19 +55,19 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
             gameId: game.gameId,
             isGameActivated: game.isGameActivated,
             startTimeUTC: game.startTimeUTC,
-            endTimeUTC: game.endTimeUTC,
+            endTimeUTC: game.endTimeUTC || '',
             period: game.period.current,
             vTeamName: game.vTeam.triCode,
-            vTeamScore: game.vTeam.score,
+            vTeamScore: game.vTeam.score || '0',
             hTeamName: game.hTeam.triCode,
-            hTeamScore: game.hTeam.score,
+            hTeamScore: game.hTeam.score || '0',
             zPlayByPlay: []
           });
         });
 
-        // todaysGames.forEach(game => {
-        //   getGamePbp.start(game.gameId, date);
-        // });
+        todaysGames.forEach(game => {
+          getGamePbpTestData.start(game.gameId, date);
+        });
       });
     });
   });
