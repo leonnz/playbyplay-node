@@ -38,9 +38,10 @@ function runGameTimeTestService() {
           {
             gameId: '0011900001',
             isGameActivated: true,
+            statusNum: '2',
             startTimeUTC: '2019-10-01T00:00:00.000Z',
-            endTimeUTC: '0',
-            period: 1,
+            endTimeUTC: '',
+            period: '1',
             vTeamName: 'SDS',
             vTeamScore: '0',
             hTeamName: 'HOU',
