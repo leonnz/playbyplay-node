@@ -21,10 +21,12 @@ const getStartData = require('../data/getStartData');
 const getGamePbp = require('../data/getGamePbp');
 const getScoreboard = require('../data/getScoreboard');
 
-const prod = { hour: 17, minute: 0, dayOfWeek: new schedule.Range(0, 6) };
-const test = '*/5 * * * * *';
+const mainScheduleRule = {
+  hour: 17,
+  minute: 0,
+  dayOfWeek: new schedule.Range(0, 6)
+};
 
-const mainScheduleRule = prod;
 const gameTimeScheduleRule = '*/24 * * * * *';
 const jsonStartTimeFile = './data/start_time.json';
 
