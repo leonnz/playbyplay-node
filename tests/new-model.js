@@ -17,23 +17,25 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
   let collection = db.collection('playbyplay').get();
 
   collection.then(querySnapshot => {
-    // querySnapshot.docs.forEach(doc => {
-    //   db.collection('playbyplay')
-    //     .doc(doc.id)
-    //     .delete();
-    // });
+    querySnapshot.docs.forEach(doc => {
+      db.collection('playbyplay')
+        .doc(doc.id)
+        .delete();
+    });
 
     axios.get(todayApi).then(response => {
       // test
-      const todaysScoreboardApi =
-        'http://data.nba.net/prod/v2/20190713/scoreboard.json';
-      const date = '20190713';
-      // prod
       //   const todaysScoreboardApi =
-      //     'http://data.nba.net/prod/v2/20190930/scoreboard.json';
-      //   const date = '20190930';
+      //     'http://data.nba.net/prod/v2/20190713/scoreboard.json';
+      //   const date = '20190713';
+      // prod
 
-      axios.get(todaysScoreboardApi).then(response => {
+      //   console.log(apiBaseURL + response.data.links.todayScoreboard);
+
+      const date = response.data.links.currentDate;
+      const scoreboardApiUrl = apiBaseURL + response.data.links.todayScoreboard;
+
+      axios.get(scoreboardApiUrl).then(response => {
         let todaysGames = response.data.games;
 
         const gameStartTime = todaysGames[0].startTimeUTC;
@@ -41,7 +43,7 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
         console.log(gameStartTime);
 
         fs.writeFile(
-          'start_time_test.json',
+          'start_time.json',
           JSON.stringify({ gameStartTime }),
           function(err) {
             if (err) throw err;

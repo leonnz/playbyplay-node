@@ -39,7 +39,7 @@ const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
     }
   } catch (error) {
     console.log(
-      'Somehthing went wrong reading the start_time.json file: ' + error
+      'Something went wrong reading the start_time.json file: ' + error
     );
   }
 });
