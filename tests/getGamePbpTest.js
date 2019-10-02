@@ -49,7 +49,7 @@ function getGamepbp(gameId, gameStartTime) {
               if (pbp.length !== 0 && pbp.length > eventCounter) {
                 // Start the queue logic
                 // Push event
-
+                console.log(pbp[counter]);
                 // increment by 1
                 eventCounter++;
               }
