@@ -57,6 +57,7 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           gameDoc.set({
             gameId: game.gameId,
             isGameActivated: game.isGameActivated,
+            statusNum: game.statusNum,
             startTimeUTC: game.startTimeUTC,
             endTimeUTC: game.endTimeUTC || '',
             period: game.period.current,

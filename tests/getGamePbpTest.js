@@ -7,12 +7,13 @@
 
 const axios = require('axios');
 const db = require('../services/firebase');
+const firebase = require('firebase-admin');
 const schedule = require('node-schedule');
 const getStartData = require('../data/getStartData');
 
 const apiBaseURL = 'http://data.nba.net';
 
-const recurrence = '*/2 * * * * *';
+const recurrence = '*/5 * * * * *';
 
 /**
  *
@@ -24,6 +25,12 @@ function getGamepbp(gameId, gameStartTime) {
 
   let eventCounter = 0;
 
+  let testScoreboardApiUrl =
+    'http://data.nba.net/prod/v2/20190930/scoreboard.json';
+
+  let testDate = '20190930';
+  let testGameId = '0011900001';
+
   const gameTimeSchedule = schedule.scheduleJob(
     {
       start: gameStartTime,
@@ -33,26 +40,43 @@ function getGamepbp(gameId, gameStartTime) {
       console.log('running...');
       // Call the pbp api
       getStartData.then(startData => {
-        axios.get(startData.scoreboardApi).then(response => {
+        axios.get(testScoreboardApiUrl).then(response => {
           // get the game status
           const status = response.data.games.filter(
             game => game.gameId == gameId
           )[0].statusNum;
-
-          if (status == 3) {
+          if (status === 3) {
             // Status 3 = game finished.
-            const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
+            const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${testDate}/${testGameId}/pbp_all.json`;
 
             axios.get(pbpApiUrl).then(response => {
               const pbp = response.data.sports_content.game.play;
-              // check if pbp is not empty
-              if (pbp.length !== 0 && pbp.length > eventCounter) {
-                // Start the queue logic
-                // Push event
-                console.log(pbp[counter]);
-                // increment by 1
-                eventCounter++;
-              }
+
+              // Get the Firestore pbp length
+
+              let gameDoc = db
+                .collection('playbyplay')
+                .doc(`game-${testGameId}`);
+
+              gameDoc.get().then(response => {
+                let zPlayByPlayLength = response.data().zPlayByPlay.length;
+                console.log('zPlayByPlayLength ' + zPlayByPlayLength);
+                console.log('pbp.length ' + pbp.length);
+
+                // check if pbp is not empty
+                if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
+                  // Start the queue logic
+                  // Push event
+                  console.log(pbp[zPlayByPlayLength]);
+                  gameDoc.update({
+                    zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
+                      pbp[zPlayByPlayLength]
+                    )
+                  });
+                  // increment by 1
+                  // eventCounter++;
+                }
+              });
             });
           } else {
             gameTimeSchedule.cancel();
