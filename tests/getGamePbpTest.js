@@ -22,6 +22,8 @@ const recurrence = '*/2 * * * * *';
 function getGamepbp(gameId, gameStartTime) {
   console.log(gameId + gameStartTime);
 
+  let eventCounter = 0;
+
   const gameTimeSchedule = schedule.scheduleJob(
     {
       start: gameStartTime,
@@ -43,7 +45,14 @@ function getGamepbp(gameId, gameStartTime) {
 
             axios.get(pbpApiUrl).then(response => {
               const pbp = response.data.sports_content.game.play;
-              // Start the queue logic
+              // check if pbp is not empty
+              if (pbp.length !== 0 && pbp.length > eventCounter) {
+                // Start the queue logic
+                // Push event
+
+                // increment by 1
+                eventCounter++;
+              }
             });
           } else {
             gameTimeSchedule.cancel();
