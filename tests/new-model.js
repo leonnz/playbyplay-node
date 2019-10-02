@@ -56,11 +56,14 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           let gameDoc = db.collection('playbyplay').doc(`game-${game.gameId}`);
           gameDoc.set({
             gameId: game.gameId,
-            isGameActivated: game.isGameActivated,
-            statusNum: game.statusNum,
+            // isGameActivated: game.isGameActivated,
+            isGameActivated: true,
+            // statusNum: game.statusNum,
+            statusNum: 2,
             startTimeUTC: game.startTimeUTC,
             endTimeUTC: game.endTimeUTC || '',
-            period: game.period.current,
+            // period: game.period.current,
+            period: 1,
             vTeamName: game.vTeam.triCode,
             vTeamScore: game.vTeam.score || '0',
             hTeamName: game.hTeam.triCode,
@@ -69,9 +72,9 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
           });
         });
 
-        todaysGames.forEach(game => {
-          getGamePbpTestData.start(game.gameId, date);
-        });
+        // todaysGames.forEach(game => {
+        //   getGamePbpTestData.start(game.gameId, date);
+        // });
       });
     });
   });
