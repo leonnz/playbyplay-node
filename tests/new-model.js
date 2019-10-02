@@ -27,9 +27,10 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
       // test
       // const scoreboardApiUrl =
       //   'http://data.nba.net/prod/v2/20190713/scoreboard.json';
+      //   const date = '20190713';
       const scoreboardApiUrl =
         'http://data.nba.net/prod/v2/20190930/scoreboard.json';
-      const date = '20190713';
+      const date = '20190930';
       // prod
 
       // const scoreboardApiUrl = apiBaseURL + response.data.links.todayScoreboard;
