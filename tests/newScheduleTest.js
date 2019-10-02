@@ -41,45 +41,8 @@ const gameTimeService = function(startTime) {
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         getGamePbpTest.start(doc.data().gameId, doc.data().startTimeUTC);
-        // console.log(doc.id, ' => ', doc.data());
-        // Call the gamePbp and the game start time for each game.
       });
     });
-
-  // const date = new Date();
-  // const start = new Date(Date.now());
-  // console.log('This indeed did run at: ' + date);
-  // console.log(
-  //   'and the passed in start time for the gameTime service is: ' + startTime
-  // );
-  // const gameTimeSchedule = schedule.scheduleJob(
-  //   {
-  //     start: Date.now()
-  //     // rule: gameTimeScheduleRule
-  //   },
-  //   () => {
-  //     console.log('doing stuff');
-  //     console.log(new Date(Date.now()));
-  // gameTimeSchedule.cancel();
-  // getStartData.then(startData => {
-  //   axios.get(startData.scoreboardApi).then(response => {
-  //     let todaysActiveGames = response.data.games.filter(game => {
-  //       return game.isGameActivated == true && game.period.current !== 0;
-  //     });
-  //     if (todaysActiveGames.length > 0) {
-  //       getScoreboard.start();
-  //       todaysActiveGames.forEach(game => {
-  //         getGamePbp.start(game.gameId);
-  //       });
-  //     } else {
-  //       getScoreboard.start();
-  //       gameTimeSchedule.cancel();
-  //       console.log('No active games');
-  //     }
-  //   });
-  // });
-  //   }
-  // );
 };
 
 // const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
@@ -99,26 +62,3 @@ try {
 }
 
 // });
-
-/**
- *
- * @param {String} startTime The start time of the game time service.
- */
-// TODO: Probably gonna need to refactor this to use a queue manager.
-/**
- *  On the front end it gets messy to handle pbp data with a queue manager and game box data separately.
- *  Consider using a queue manager in this process for both pbp and gamebox data.
- *
- *  Instead of running the gameTimeService every 24 seconds run it once, each getGamePbp service will then run once,
- *  inside each getGamePbp service will a schedule, with a queue manager. The queue manager will as follows:
- *
- *  Initiate the 2 queue's, a main pbp queue and a dummy pbp queue behind the scenes which are identical at first.
- *  Only the dummy pbp queue is saved to Firestore.
- *
- *  At the schdeuled interval get the latest data from NBA API and save as the main pbp queue.
- *  If the main pbp queue array is greater than the dummy pbp queue array then push the last event from the main pbp queue onto
- *  the dummy pbp queue, repeat until the queues are the same length.
- *
- *  The main nba doc data may have to be merged with the game pbp docs.
- *
- */

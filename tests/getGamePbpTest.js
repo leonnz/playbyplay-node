@@ -23,8 +23,6 @@ const recurrence = '*/5 * * * * *';
 function getGamepbp(gameId, gameStartTime) {
   console.log(gameId + gameStartTime);
 
-  let eventCounter = 0;
-
   let testScoreboardApiUrl =
     'http://data.nba.net/prod/v2/20190930/scoreboard.json';
 
@@ -45,14 +43,13 @@ function getGamepbp(gameId, gameStartTime) {
           const status = response.data.games.filter(
             game => game.gameId == gameId
           )[0].statusNum;
-          if (status === 3) {
+          if (status !== 3) {
             // Status 3 = game finished.
+
             const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${testDate}/${testGameId}/pbp_all.json`;
 
             axios.get(pbpApiUrl).then(response => {
               const pbp = response.data.sports_content.game.play;
-
-              // Get the Firestore pbp length
 
               let gameDoc = db
                 .collection('playbyplay')
@@ -63,9 +60,8 @@ function getGamepbp(gameId, gameStartTime) {
                 console.log('zPlayByPlayLength ' + zPlayByPlayLength);
                 console.log('pbp.length ' + pbp.length);
 
-                // check if pbp is not empty
+                // Start the queue logic
                 if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
-                  // Start the queue logic
                   // Push event
                   console.log(pbp[zPlayByPlayLength]);
                   gameDoc.update({
@@ -73,8 +69,6 @@ function getGamepbp(gameId, gameStartTime) {
                       pbp[zPlayByPlayLength]
                     )
                   });
-                  // increment by 1
-                  // eventCounter++;
                 }
               });
             });
@@ -82,19 +76,6 @@ function getGamepbp(gameId, gameStartTime) {
             gameTimeSchedule.cancel();
           }
         });
-        // axios.get(gameUrl).then(response => {
-        //   // Save to firestore if plays is not empty
-        //   let plays = response.data.sports_content.game.play;
-        //   if (plays !== undefined) {
-        //     let docRef = db.collection('playbyplay').doc('game-' + gameId);
-        //     docRef.set(
-        //       {
-        //         plays: plays
-        //       },
-        //       { merge: true }
-        //     );
-        //   }
-        // });
       });
       console.log('getGamesPbp.js ran');
     }
