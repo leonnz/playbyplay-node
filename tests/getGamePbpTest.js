@@ -21,8 +21,6 @@ const recurrence = '*/5 * * * * *';
 //  * @param {String} date The date for todays game.
  */
 function getGamepbp(gameId, gameStartTime) {
-  console.log(gameId + gameStartTime);
-
   let testScoreboardApiUrl =
     'http://data.nba.net/prod/v2/20190930/scoreboard.json';
 
@@ -43,7 +41,6 @@ function getGamepbp(gameId, gameStartTime) {
           const status = response.data.games.filter(
             game => game.gameId == gameId
           )[0].statusNum;
-          console.log(status);
           if (status == 3) {
             // Status 3 = game finished.
 

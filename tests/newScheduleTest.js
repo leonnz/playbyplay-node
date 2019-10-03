@@ -33,8 +33,6 @@ const gameTimeScheduleRule = '*/2 * * * * *';
 const jsonStartTimeFile = './data/start_time.json';
 
 const gameTimeService = function(startTime) {
-  console.log('hi');
-
   // Could probably do this from the reloadData.js after setting the days games and not this file.
   db.collection('playbyplay')
     .get()
@@ -52,7 +50,6 @@ try {
 
   if (startTimeFile.byteLength > 0) {
     const startTime = JSON.parse(startTimeFile).gameStartTime;
-    console.log(startTime);
     gameTimeService(startTime);
   }
 } catch (error) {
