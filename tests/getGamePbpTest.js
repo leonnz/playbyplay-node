@@ -43,7 +43,8 @@ function getGamepbp(gameId, gameStartTime) {
           const status = response.data.games.filter(
             game => game.gameId == gameId
           )[0].statusNum;
-          if (status !== 3) {
+          console.log(status);
+          if (status == 3) {
             // Status 3 = game finished.
 
             const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${testDate}/${testGameId}/pbp_all.json`;
@@ -77,7 +78,6 @@ function getGamepbp(gameId, gameStartTime) {
           }
         });
       });
-      console.log('getGamesPbp.js ran');
     }
   );
 
