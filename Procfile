@@ -1,1 +1,1 @@
-worker: node ./tests/scheduleTest.js
+worker: node ./tests/newScheduleTestProd.js
