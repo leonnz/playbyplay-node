@@ -36,7 +36,7 @@ function getGamepbp(gameId, gameStartTime) {
       console.log('running...');
       // Call the pbp api
       getStartData.then(startData => {
-        axios.get(testScoreboardApiUrl).then(response => {
+        axios.get(startData.scoreboardApi).then(response => {
           // get the game status
           const status = response.data.games.filter(
             game => game.gameId == gameId
@@ -44,34 +44,33 @@ function getGamepbp(gameId, gameStartTime) {
           if (status == 3) {
             // Status 3 = game finished.
 
-            const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${testDate}/${testGameId}/pbp_all.json`;
+            const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
 
             axios.get(pbpApiUrl).then(response => {
               const pbp = response.data.sports_content.game.play;
 
-              let gameDoc = db
-                .collection('playbyplay')
-                .doc(`game-${testGameId}`);
+              let gameDoc = db.collection('playbyplay').doc(`game-${gameId}`);
 
               gameDoc.get().then(response => {
                 let zPlayByPlayLength = response.data().zPlayByPlay.length;
-                console.log('zPlayByPlayLength ' + zPlayByPlayLength);
-                console.log('pbp.length ' + pbp.length);
+                // console.log('zPlayByPlayLength ' + zPlayByPlayLength);
+                // console.log('pbp.length ' + pbp.length);
 
                 // Start the queue logic
                 if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
                   // Push event
                   const lastEvent = pbp[zPlayByPlayLength];
 
-                  console.log(pbp[zPlayByPlayLength]);
+                  // console.log(pbp[zPlayByPlayLength]);
                   gameDoc.update({
-                    period: lastEvent.period,
+                    period: parseInt(lastEvent.period),
                     hTeamScore: lastEvent.home_score,
                     vTeamScore: lastEvent.visitor_score,
                     zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
                       lastEvent
                     )
                   });
+                  console.log('added event for ...' + gameId);
                 }
               });
             });
@@ -82,25 +81,6 @@ function getGamepbp(gameId, gameStartTime) {
       });
     }
   );
-
-  // getStartData.then(startData => {
-  //   const gameUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
-  //   console.log(gameUrl);
-  //   axios.get(gameUrl).then(response => {
-  //     // Save to firestore if plays is not empty
-  //     let plays = response.data.sports_content.game.play;
-  //     if (plays !== undefined) {
-  //       let docRef = db.collection('playbyplay').doc('game-' + gameId);
-  //       docRef.set(
-  //         {
-  //           plays: plays
-  //         },
-  //         { merge: true }
-  //       );
-  //     }
-  //   });
-  // });
-  // console.log('getGamesPbp.js ran');
 }
 
 module.exports.start = getGamepbp;
