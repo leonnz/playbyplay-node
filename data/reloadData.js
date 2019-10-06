@@ -7,10 +7,10 @@
  *    4. Get's the first game start time for the day and saves to the json time file.
  */
 
-const fs = require('fs');
+// const fs = require('fs');
 const axios = require('axios');
 const db = require('../services/firebase');
-const getGamePbp = require('../data/getGamePbp');
+// const getGamePbp = require('../data/getGamePbp');
 const apiBaseURL = 'http://data.nba.net';
 const todayApi = apiBaseURL + '/prod/v3/today.json';
 
@@ -26,24 +26,24 @@ const todayApi = apiBaseURL + '/prod/v3/today.json';
     });
 
     axios.get(todayApi).then(response => {
-      const date = response.data.links.currentDate;
+      // const date = response.data.links.currentDate;
       const scoreboardApiUrl = apiBaseURL + response.data.links.todayScoreboard;
 
       axios.get(scoreboardApiUrl).then(response => {
         let todaysGames = response.data.games;
 
-        const gameStartTime = todaysGames[0].startTimeUTC;
+        // const gameStartTime = todaysGames[0].startTimeUTC;
 
-        console.log(gameStartTime);
+        // console.log(gameStartTime);
 
-        fs.writeFile(
-          'start_time.json',
-          JSON.stringify({ gameStartTime }),
-          function(err) {
-            if (err) throw err;
-            console.log('Time file saved');
-          }
-        );
+        // fs.writeFile(
+        //   'start_time.json',
+        //   JSON.stringify({ gameStartTime }),
+        //   function(err) {
+        //     if (err) throw err;
+        //     console.log('Time file saved');
+        //   }
+        // );
 
         todaysGames.forEach(game => {
           let gameDoc = db.collection('playbyplay').doc(`game-${game.gameId}`);
