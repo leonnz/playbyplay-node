@@ -61,10 +61,14 @@ function getGamepbp(gameId, gameStartTime) {
                 // Start the queue logic
                 if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
                   // Push event
+                  const lastEvent = pbp[zPlayByPlayLength];
+
                   console.log(pbp[zPlayByPlayLength]);
                   gameDoc.update({
+                    hTeamScore: lastEvent.home_score,
+                    vTeamScore: lastEvent.visitor_score,
                     zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
-                      pbp[zPlayByPlayLength]
+                      lastEvent
                     )
                   });
                 }
