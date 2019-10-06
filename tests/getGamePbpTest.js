@@ -65,6 +65,7 @@ function getGamepbp(gameId, gameStartTime) {
 
                   console.log(pbp[zPlayByPlayLength]);
                   gameDoc.update({
+                    period: lastEvent.period,
                     hTeamScore: lastEvent.home_score,
                     vTeamScore: lastEvent.visitor_score,
                     zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
