@@ -18,14 +18,14 @@ const recurrence = '*/5 * * * * *';
 /**
  *
  * @param {String} gameId The gameId of the game.
-//  * @param {String} date The date for todays game.
+ * @param {String} gameStartTime The game start time in UTC.
  */
 function getGamepbp(gameId, gameStartTime) {
-  let testScoreboardApiUrl =
-    'http://data.nba.net/prod/v2/20190930/scoreboard.json';
+  // let testScoreboardApiUrl =
+  //   'http://data.nba.net/prod/v2/20190930/scoreboard.json';
 
-  let testDate = '20190930';
-  let testGameId = '0011900001';
+  // let testDate = '20190930';
+  // let testGameId = '0011900001';
 
   const gameTimeSchedule = schedule.scheduleJob(
     {
