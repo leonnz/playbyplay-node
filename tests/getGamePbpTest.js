@@ -40,10 +40,11 @@ function getGamepbp(gameId, gameStartTime) {
 
       getStartData.then(startData => {
         axios.get(startData.scoreboardApi).then(response => {
+          console.log('Scoreboard api: ' + startData.scoreboardApi);
           const game = response.data.games.filter(
             game => game.gameId == gameId
           )[0];
-
+          console.log(game);
           if (game !== undefined && game !== null) {
             gameDoc.set(
               {
