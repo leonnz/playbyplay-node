@@ -35,47 +35,61 @@ function getGamepbp(gameId, gameStartTime) {
     () => {
       console.log('running...');
       // Call the pbp api
+
+      const gameDoc = db.collection('playbyplay').doc(`game-${gameId}`);
+
       getStartData.then(startData => {
         axios.get(startData.scoreboardApi).then(response => {
-          // get the game status
-          const status = response.data.games.filter(
+          const game = response.data.games.filter(
             game => game.gameId == gameId
-          )[0].statusNum;
-          if (status == 3) {
-            // Status 3 = game finished.
+          )[0];
 
-            const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
+          if (game !== undefined && game !== null) {
+            gameDoc.set(
+              {
+                endTimeUTC: game.endTimeUTC,
+                statusNum: game.statusNum
+              },
+              { merge: true }
+            );
 
-            axios.get(pbpApiUrl).then(response => {
-              const pbp = response.data.sports_content.game.play;
+            // if (game.statusNum == 3) { // For testing finished games
+            if (game.statusNum !== 3) {
+              // Status 3 = game finished.
 
-              let gameDoc = db.collection('playbyplay').doc(`game-${gameId}`);
+              const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
 
-              gameDoc.get().then(response => {
-                let zPlayByPlayLength = response.data().zPlayByPlay.length;
-                // console.log('zPlayByPlayLength ' + zPlayByPlayLength);
-                // console.log('pbp.length ' + pbp.length);
+              axios.get(pbpApiUrl).then(response => {
+                const pbp = response.data.sports_content.game.play;
 
-                // Start the queue logic
-                if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
-                  // Push event
-                  const lastEvent = pbp[zPlayByPlayLength];
+                gameDoc.get().then(response => {
+                  let zPlayByPlayLength = response.data().zPlayByPlay.length;
+                  // console.log('zPlayByPlayLength ' + zPlayByPlayLength);
+                  // console.log('pbp.length ' + pbp.length);
 
-                  // console.log(pbp[zPlayByPlayLength]);
-                  gameDoc.update({
-                    period: parseInt(lastEvent.period),
-                    hTeamScore: lastEvent.home_score,
-                    vTeamScore: lastEvent.visitor_score,
-                    zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
-                      lastEvent
-                    )
-                  });
-                  console.log('added event for ...' + gameId);
-                }
+                  // Start the queue logic
+                  if (pbp.length !== 0 && pbp.length > zPlayByPlayLength) {
+                    // Push event
+                    const lastEvent = pbp[zPlayByPlayLength];
+
+                    // console.log(pbp[zPlayByPlayLength]);
+                    gameDoc.update({
+                      period: parseInt(lastEvent.period),
+                      hTeamScore: lastEvent.home_score,
+                      vTeamScore: lastEvent.visitor_score,
+                      zPlayByPlay: firebase.firestore.FieldValue.arrayUnion(
+                        lastEvent
+                      )
+                    });
+                    console.log('added event for ...' + gameId);
+                  }
+                });
               });
-            });
+            } else {
+              gameTimeSchedule.cancel();
+            }
           } else {
-            gameTimeSchedule.cancel();
+            console.log('No game found');
           }
         });
       });

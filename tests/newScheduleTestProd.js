@@ -46,6 +46,16 @@ const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
   // };
 });
 
+(function test() {
+  db.collection('playbyplay')
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        getGamePbpTest.start(doc.data().gameId, doc.data().startTimeUTC);
+      });
+    });
+})();
+
 // const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
 
 // try {
