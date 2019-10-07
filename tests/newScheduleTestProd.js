@@ -36,6 +36,7 @@ const mainScheduleRule = {
 const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
   // const gameTimeService = function(startTime) {
   // Could probably do this from the reloadData.js after setting the days games and not this file.
+  console.log('This ran at ' + new Date());
   db.collection('playbyplay')
     .get()
     .then(function(querySnapshot) {

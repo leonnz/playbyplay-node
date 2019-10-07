@@ -26,14 +26,14 @@ function getGamepbp(gameId, gameStartTime) {
 
   // let testDate = '20190930';
   // let testGameId = '0011900001';
-
+  console.log(gameStartTime);
   const gameTimeSchedule = schedule.scheduleJob(
     {
       start: gameStartTime,
       rule: recurrence
     },
     () => {
-      console.log('running...');
+      console.log('running... ');
       // Call the pbp api
 
       const gameDoc = db.collection('playbyplay').doc(`game-${gameId}`);
