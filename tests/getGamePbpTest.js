@@ -11,7 +11,9 @@ const firebase = require('firebase-admin');
 const schedule = require('node-schedule');
 const getStartData = require('../data/getStartData');
 
-const apiBaseURL = 'http://data.nba.net';
+const nbaApiTodayUrl = 'http://data.nba.net/prod/v3/today.json';
+
+const nbaApiPbpUrl = 'http://data.nba.net/json/cms/noseason/game';
 
 const recurrence = '*/5 * * * * *';
 
@@ -58,7 +60,7 @@ function getGamepbp(gameId, gameStartTime) {
             if (game.statusNum !== 3) {
               // Status 3 = game finished.
 
-              const pbpApiUrl = `${apiBaseURL}/json/cms/noseason/game/${startData.currentDate}/${gameId}/pbp_all.json`;
+              const pbpApiUrl = `${nbaApiPbpUrl}/${startData.currentDate}/${gameId}/pbp_all.json`;
 
               axios.get(pbpApiUrl).then(response => {
                 const pbp = response.data.sports_content.game.play;
