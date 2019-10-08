@@ -16,13 +16,12 @@
 
 // const fs = require('fs');
 const db = require('../services/firebase');
-// const axios = require('axios');
+const axios = require('axios');
 const schedule = require('node-schedule');
 const getGamePbpTest = require('./getGamePbpTest');
 
-// const getStartData = require('../data/getStartData');
-// const getGamePbp = require('../data/getGamePbp');
-// const getScoreboard = require('../data/getScoreboard');
+const nbaApiBaseUrl = 'http://data.nba.net';
+const nbaApiTodayUrl = 'http://data.nba.net/prod/v3/today.json';
 
 const mainScheduleRule = {
   hour: 17,
@@ -30,21 +29,30 @@ const mainScheduleRule = {
   dayOfWeek: new schedule.Range(0, 6)
 };
 
-// const gameTimeScheduleRule = '*/2 * * * * *';
-// const jsonStartTimeFile = './data/start_time.json';
-
 const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
-  // const gameTimeService = function(startTime) {
-  // Could probably do this from the reloadData.js after setting the days games and not this file.
   console.log('This ran at ' + new Date());
-  db.collection('playbyplay')
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        getGamePbpTest.start(doc.data().gameId, doc.data().startTimeUTC);
+
+  axios.get(nbaApiTodayUrl).then(response => {
+    const nbaApiTodayScoreboardUrl =
+      nbaApiBaseUrl + response.data.links.todayScoreboard;
+    console.log('Scoreboard url ' + nbaApiTodayScoreboardUrl);
+
+    const currentDate = response.data.links.currentDate;
+    console.log('Çurrent date: ' + currentDate);
+
+    db.collection('playbyplay')
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          getGamePbpTest.start(
+            doc.data().gameId,
+            doc.data().startTimeUTC,
+            nbaApiTodayScoreboardUrl,
+            currentDate
+          );
+        });
       });
-    });
-  // };
+  });
 });
 
 // Only for manually testing
