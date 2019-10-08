@@ -46,7 +46,8 @@ function getGamepbp(
           gameDoc.set(
             {
               endTimeUTC: game.endTimeUTC,
-              statusNum: game.statusNum
+              statusNum: game.statusNum,
+              clock: game.clock
             },
             { merge: true }
           );
