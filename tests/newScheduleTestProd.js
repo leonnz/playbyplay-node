@@ -57,13 +57,27 @@ const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
 
 // Only for manually testing
 // (function test() {
-//   db.collection('playbyplay')
-//     .get()
-//     .then(function(querySnapshot) {
-//       querySnapshot.forEach(function(doc) {
-//         getGamePbpTest.start(doc.data().gameId, doc.data().startTimeUTC);
+//   axios.get(nbaApiTodayUrl).then(response => {
+//     const nbaApiTodayScoreboardUrl =
+//       nbaApiBaseUrl + response.data.links.todayScoreboard;
+//     console.log('Scoreboard url ' + nbaApiTodayScoreboardUrl);
+
+//     const currentDate = response.data.links.currentDate;
+//     console.log('Current date: ' + currentDate);
+
+//     db.collection('playbyplay')
+//       .get()
+//       .then(function(querySnapshot) {
+//         querySnapshot.forEach(function(doc) {
+//           getGamePbpTest.start(
+//             doc.data().gameId,
+//             doc.data().startTimeUTC,
+//             nbaApiTodayScoreboardUrl,
+//             currentDate
+//           );
+//         });
 //       });
-//     });
+//   });
 // })();
 
 // const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
