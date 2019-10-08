@@ -45,6 +45,7 @@ function getGamepbp(
         if (game !== undefined && game !== null) {
           gameDoc.set(
             {
+              isGameActivated: game.isGameActivated,
               endTimeUTC: game.endTimeUTC,
               statusNum: game.statusNum,
               clock: game.clock
