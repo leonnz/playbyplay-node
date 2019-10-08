@@ -38,7 +38,7 @@ const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
     console.log('Scoreboard url ' + nbaApiTodayScoreboardUrl);
 
     const currentDate = response.data.links.currentDate;
-    console.log('Çurrent date: ' + currentDate);
+    console.log('Current date: ' + currentDate);
 
     db.collection('playbyplay')
       .get()
