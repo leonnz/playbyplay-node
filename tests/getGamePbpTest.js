@@ -46,7 +46,7 @@ function getGamepbp(
           gameDoc.set(
             {
               isGameActivated: game.isGameActivated,
-              endTimeUTC: game.endTimeUTC,
+              endTimeUTC: game.endTimeUTC || '',
               statusNum: game.statusNum,
               clock: game.clock
             },
@@ -81,16 +81,16 @@ function getGamepbp(
                       lastEvent
                     )
                   });
-                  console.log('added event for ...' + gameId);
+                  console.log('added event for game: ' + gameId);
                 }
               });
             });
           } else {
-            console.log('No active game found');
+            console.log('No active game found with id: ' + gameId);
             gameTimeSchedule.cancel();
           }
         } else {
-          console.log('No game found');
+          console.log('No game found with id: ' + gameId);
           gameTimeSchedule.cancel();
         }
       });

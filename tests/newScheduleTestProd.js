@@ -14,7 +14,6 @@
  *    The schedule relies on the reloadData.js script to have run at 4.40pm UTC.
  */
 
-// const fs = require('fs');
 const db = require('../services/firebase');
 const axios = require('axios');
 const schedule = require('node-schedule');
@@ -30,7 +29,7 @@ const mainScheduleRule = {
 };
 
 const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
-  console.log('This ran at ' + new Date());
+  console.log('newScheduleTestProd.js ran at ' + new Date());
 
   axios.get(nbaApiTodayUrl).then(response => {
     const nbaApiTodayScoreboardUrl =
@@ -79,20 +78,3 @@ const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
 //       });
 //   });
 // })();
-
-// const mainSchedule = schedule.scheduleJob({ rule: mainScheduleRule }, () => {
-
-// try {
-//   const startTimeFile = fs.readFileSync(jsonStartTimeFile);
-
-//   if (startTimeFile.byteLength > 0) {
-//     const startTime = JSON.parse(startTimeFile).gameStartTime;
-//     gameTimeService(startTime);
-//   }
-// } catch (error) {
-//   console.log(
-//     'Something went wrong reading the start_time.json file: ' + error
-//   );
-// }
-
-// });
